@@ -20,15 +20,26 @@ const questions = [
     }
 ];
 
+function getUserProfile(url) {
+    return axios.get(url);
+  }
+   
+function getUserStars(url) {
+    return axios.get(url);
+  }
+
 async function promptUser() {
     const userInput = await inquirer.prompt(questions);
     console.log(userInput);
-    const queryUrl = `https://api.github.com/users/${userInput.username}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
+    const queryUser = `https://api.github.com/users/${userInput.username}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
 
-    axios.get(queryUrl).then(function(res) {
-        const html = generateHTML(userInput, res);
+    const queryStar = `https://api.github.com/users/${userInput.username}/repos?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&per_page=100`
+
+    axios.all([getUserProfile(queryUser), getUserStars(queryStar)])
+    .then(axios.spread(function (profile, stars) {
+        const html = generateHTML(userInput, profile, stars);
         writeFileAsync("index.html", html);
-    })
+    }));
 }
 
 promptUser();

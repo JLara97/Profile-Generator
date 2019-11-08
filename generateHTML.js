@@ -25,7 +25,7 @@ const colors = {
     }
   };
   
-  function generateHTML(user, data) {
+  function generateHTML(user, data, star) {
       const userdata = data;
     return `<!DOCTYPE html>
   <html lang="en">
@@ -211,6 +211,7 @@ const colors = {
                  <div class="col">
                  <div class="card">
                     <h3>GitHub Stars</h3>
+                    <h4>${star.data[0].stargazers_count}
                     </div>
                  </div>
                   <div class="col">
