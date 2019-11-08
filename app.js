@@ -22,8 +22,13 @@ const questions = [
 
 async function promptUser() {
     const userInput = await inquirer.prompt(questions);
-    const html = await generateHTML(userInput);
-    await writeFileAsync("index.html", html);
+    console.log(userInput);
+    const queryUrl = `https://api.github.com/users/${userInput.username}?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}`
+
+    axios.get(queryUrl).then(function(res) {
+        const html = generateHTML(userInput, res);
+        writeFileAsync("index.html", html);
+    })
 }
 
 promptUser();
