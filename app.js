@@ -1,7 +1,11 @@
 const fs = require("fs");
 const inquirer = require("inquirer");
+const util = require("util");
 const axios = require("axios");
 const electron = require("electron");
+const generateHTML = require("./generateHTML")
+
+const writeFileAsync = util.promisify(fs.writeFile);
 
 const questions = [
     {
@@ -16,12 +20,10 @@ const questions = [
     }
 ];
 
-function writeToFile(fileName, data) {
- 
+async function promptUser() {
+    const userInput = await inquirer.prompt(questions);
+    const html = await generateHTML(userInput);
+    await writeFileAsync("index.html", html);
 }
 
-function init() {
-    
-}
-
-init();
+promptUser();
